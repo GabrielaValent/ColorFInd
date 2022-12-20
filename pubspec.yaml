@@ -41,6 +41,11 @@ dependencies:
   camera:
   image_picker:
   persistent_bottom_nav_bar:
+  firebase_core:
+  firebase_database:
+  firebase_storage: ^11.0.4
+  http: ^0.13.3
+
 
 
 dev_dependencies:

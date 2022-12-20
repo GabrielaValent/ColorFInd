@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "842874380689",
+    "firebase_url": "https://colorfindlddm-default-rtdb.firebaseio.com",
+    "project_id": "colorfindlddm",
+    "storage_bucket": "colorfindlddm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842874380689:android:ef362c24c6a11deb8d3a30",
+        "android_client_info": {
+          "package_name": "br.com.colorfind.color_find"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842874380689-7jn2o80kqppb1uqmcackpgamjuhetgei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCG4VVM71TiPhWZ8-1i-g8b7Sm3SfVyY7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842874380689-7jn2o80kqppb1uqmcackpgamjuhetgei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "842874380689-lv5474g58116qd77iaet0o5j5397o5ou.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.colorfind.colorFind"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842874380689:android:7dc4702cbd54c2728d3a30",
+        "android_client_info": {
+          "package_name": "com.example.testedb2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842874380689-7jn2o80kqppb1uqmcackpgamjuhetgei.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCG4VVM71TiPhWZ8-1i-g8b7Sm3SfVyY7c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842874380689-7jn2o80kqppb1uqmcackpgamjuhetgei.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "842874380689-lv5474g58116qd77iaet0o5j5397o5ou.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "br.com.colorfind.colorFind"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

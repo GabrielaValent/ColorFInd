@@ -1,19 +1,77 @@
 import 'package:flutter/material.dart';
 import 'package:testedb2/home.dart';
 import 'sql_helper.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'dart:async';
+
+
 
 class Page4 extends StatefulWidget {
-  const Page4({Key? key}) : super(key: key);
+  Page4({Key? key}) : super(key: key);
 
   @override
   State<Page4> createState() => _Page4State();
 }
 
 class _Page4State extends State<Page4> {
+
+  String color="";
+  String name_color="";
+
+  late DatabaseReference imagensRef;
+
+  late StreamSubscription<DatabaseEvent> colorSubscription;
+  late StreamSubscription<DatabaseEvent> name_colorSubscription;
+
+  //bool _ISLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    init();
+    _refreshJournals(); // Loading the diary when the app starts
+  }
+
+  init() async {
+    imagensRef = FirebaseDatabase.instance.ref('Imagens');
+
+    try {
+      DatabaseEvent colorget = await imagensRef.once();
+      DatabaseEvent name_colorget = await imagensRef.once();
+
+      setState(() {
+        color = colorget.snapshot.child("color") as String ;
+        name_color = name_colorget.snapshot.child("name_color") as String;
+      });
+    } catch (err) {
+      print(err.toString());
+    }
+
+    colorSubscription = imagensRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        color = (event.snapshot.child("color").value) as String;
+      });
+    });
+
+    name_colorSubscription = imagensRef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        name_color = (event.snapshot.child("name_color").value) as String;
+      });
+    });
+
+  }
+
+  @override
+  void dispose() {
+    colorSubscription.cancel();
+    name_colorSubscription.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    String nome = 'azul';
-    String hex = '#0000ff';
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -28,52 +86,66 @@ class _Page4State extends State<Page4> {
         backgroundColor: Colors.purple,
         automaticallyImplyLeading: false,
       ),
-      body: Column(
+      body: /*ISLoading
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+          :*/
+      Column(
         children: <Widget>[
           Padding(
-              padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.all(40.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Container(
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(300),
-                            //border: Border.all(color: Colors.black, width: 3)
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 50.0,
                         ),
-                      )
-                  ),
-                      const SizedBox(
-                        height: 30.0,
-                      ),
-                      Text(
-                        nome,
-                        style: const TextStyle(
-                          fontSize: 40.0,
-                          color: Colors.black,
+                        AspectRatio(
+                            aspectRatio: 1,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(int.parse(color.replaceAll('#', '0xff'))),
+                                borderRadius: BorderRadius.circular(300),
+                                //border: Border.all(color: Colors.black, width: 3)
+                              ),
+                            )
                         ),
-                      ),
-                      Text(
-                        hex,
-                        style: const TextStyle(
-                          fontSize: 30.0,
-                          color: Colors.black,
+                        const SizedBox(
+                          height: 30.0,
                         ),
-                      ),
-                    ],
-                  ),
-                )
+                        Text(
+                          color,
+                          style: const TextStyle(
+                            fontSize: 40.0,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          name_color,
+                          style: const TextStyle(
+                            fontSize: 30.0,
+                            color: Colors.black,
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  )
+              )
             ),
           ),
         ],
       ),
       bottomNavigationBar: buildMyNavBar2(context),
     );
+
+
   }
 
   Container buildMyNavBar2(BuildContext context) {
@@ -118,15 +190,9 @@ class _Page4State extends State<Page4> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _refreshJournals(); // Loading the diary when the app starts
-  }
 
-  String _titleController = 'azul';
+
   TextEditingController _descriptionController = TextEditingController();
-  String _hexController = '#0000FF';
 
 
 
@@ -136,7 +202,7 @@ class _Page4State extends State<Page4> {
       // id != null -> update an existing item
       final existingJournal =
       _journals.firstWhere((element) => element['id'] == id);
-      _titleController = existingJournal['title'];
+      name_color = existingJournal['title'];
       _descriptionController.text = existingJournal['description'];
       _descriptionController = existingJournal['hex'];
     }
@@ -188,12 +254,15 @@ class _Page4State extends State<Page4> {
             ],
           ),
         ));
+
+
+
   }
 
 // Insert a new journal to the database
   Future<void> _addItem() async {
     await SQLHelper.createItem(
-        _titleController, _descriptionController.text, _hexController);
+        name_color, _descriptionController.text, color);
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Successfully added a color!'),
     ));
@@ -203,7 +272,7 @@ class _Page4State extends State<Page4> {
   // Update an existing journal
   Future<void> _updateItem(int id) async {
     await SQLHelper.updateItem(
-        id, _titleController, _descriptionController.text, _hexController);
+        id, name_color, _descriptionController.text, color);
     _refreshJournals();
   }
 
